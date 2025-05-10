@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-# The script should take one argument
 
 if ARGV.length != 1
   puts "Usage: #{$PROGRAM_NAME} <string>"
