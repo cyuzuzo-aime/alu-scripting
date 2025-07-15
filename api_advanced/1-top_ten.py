@@ -1,38 +1,61 @@
 #!/usr/bin/python3
 """
-1-top_ten.py
-Queries the Reddit API and prints titles of the first 10 hot posts
-for a given subreddit. Prints None if subreddit is invalid.
+Queries the Reddit API and prints the titles of the first 10 hot posts
+listed for a given subreddit.
 """
-
 import requests
-
 
 def top_ten(subreddit):
     """
-    Queries Reddit API for hot posts in a subreddit and prints the titles
-    of the first 10 posts. Prints None if subreddit is invalid or on error.
+    Prints the titles of the first 10 hot posts for a given subreddit.
 
     Args:
-        subreddit (str): The name of the subreddit to query.
+        subreddit (str): The name of the subreddit.
+
+    Returns:
+        None: If the subreddit is invalid or an error occurs.
     """
-    headers = {'User-Agent': 'python:top_ten:v1.0 (by /u/yourusername)'}
-    url = f"https://www.reddit.com/r/{subreddit}/hot.json?limit=10"
+    # Reddit API endpoint for hot posts
+    url = f"https://www.reddit.com/r/{subreddit}/hot.json"
+
+    # Set a custom User-Agent to avoid Too Many Requests errors.
+    # Reddit's API requires a User-Agent.
+    headers = {
+        "User-Agent": "my_reddit_api_script/1.0 (by /u/your_reddit_username)"
+    }
 
     try:
+        # Make the GET request to the Reddit API.
+        # allow_redirects=False is crucial to handle invalid subreddits
+        # that might redirect to search results.
         response = requests.get(url, headers=headers, allow_redirects=False)
-        if response.status_code == 302:
+
+        # Check if the request was successful (status code 200)
+        if response.status_code == 200:
+            data = response.json()
+            # Extract the list of posts from the JSON response
+            posts = data.get('data', {}).get('children', [])
+
+            # Print the titles of the first 10 hot posts
+            for i, post in enumerate(posts):
+                if i >= 10:
+                    break # Stop after printing 10 titles
+                title = post.get('data', {}).get('title')
+                if title:
+                    print(title)
+        else:
+            # If status code is not 200 (e.g., 404 Not Found, or 3xx redirect),
+            # it means the subreddit is likely invalid or an issue occurred.
             print(None)
-            return
-        if response.status_code != 200:
-            print(None)
-            return
-        data = response.json()
-        posts = data.get("data", {}).get("children", [])
-        if not posts:
-            print(None)
-            return
-        for post in posts:
-            print(post["data"].get("title"))
-    except Exception:
+
+    except requests.exceptions.RequestException as e:
+        # Handle network-related errors (e.g., no internet connection, DNS failure)
         print(None)
+        # Optionally, print the error for debugging purposes:
+        # print(f"An error occurred: {e}", file=sys.stderr)
+
+    except ValueError:
+        # Handle JSON decoding errors (e.g., if the response is not valid JSON)
+        print(None)
+        # Optionally, print the error for debugging purposes:
+        # print(f"Failed to decode JSON response.", file=sys.stderr)
