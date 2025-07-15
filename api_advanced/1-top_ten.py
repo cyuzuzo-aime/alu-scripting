@@ -1,24 +1,29 @@
 #!/usr/bin/python3
-"""Script that fetch 10 hot post for a given subreddit."""
+"""
+1-top_ten.py
+"""
 import requests
 
 
 def top_ten(subreddit):
-    """Return number of subscribers if @subreddit is valid subreddit.
-    if not return 0."""
-
-    headers = {
-        'User-Agent': 'python:alx_topten:v1.0 (by JeanPhilippe2025)'
-    }
-    url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
-    response = requests.get(url, headers=headers, allow_redirects=False)
-
-    if response.status_code == 200:
-        json_data = response.json()
-        posts = json_data.get('data', {}).get('children', [])
-        for i in range(min(10, len(posts))):
-            print(posts[i].get('data', {}).get('title'), end="")
-        # print("OK", end=None)
-    else:
-        # print("OK", end="")
-        print(None, end="")
+    """ DOCUMENTATION OF TOP TEN FN """
+    headers = {'User-Agent': 'python:top_ten:v1.0 (by /u/yourusername)'}
+    url = f"https://www.reddit.com/r/{subreddit}/hot.json?limit=10"
+    try:
+        response = requests.get(url, headers=headers, allow_redirects=False)
+        if response.status_code == 302:
+            print(None)
+            return
+        if response.status_code != 200:
+            print(None)
+            return
+        data = response.json()
+        
+        posts = data.get("data", {}).get("children", [])
+        if not posts:
+            print(None)
+            return
+        for post in posts:
+            print(post["data"].get("title"))
+    except Exception:
+        print(None)
