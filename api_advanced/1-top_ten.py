@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """Script that fetch 10 hot post for a given subreddit."""
 import requests
-import sys
 
 
 def top_ten(subreddit):
@@ -21,7 +20,3 @@ def top_ten(subreddit):
             print(posts[i].get('data', {}).get('title'))
     else:
         print(None)
-
-
-if __name__ == "__main__":
-    top_ten(sys.argv[1])
