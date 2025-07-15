@@ -1,5 +1,6 @@
+#!/usr/bin/python3
 import requests
-
+"""Script that fetch 10 hot post for a given subreddit."""
 def top_ten(subreddit):
     """Return number of subscribers if @subreddit is valid subreddit.
     if not return 0."""
