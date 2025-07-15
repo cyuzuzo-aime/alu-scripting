@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """Script that fetch 10 hot post for a given subreddit."""
 import requests
-import sys
 
 
 def top_ten(subreddit):
@@ -17,13 +16,9 @@ def top_ten(subreddit):
     if response.status_code == 200:
         json_data = response.json()
         posts = json_data.get('data', {}).get('children', [])
-        # for i in range(min(10, len(posts))):
-            # print(posts[i].get('data', {}).get('title'))
-        # print("OK", end="")
-        sys.stdout.write("OK")
-        sys.stdout.flush()
+        for i in range(min(10, len(posts))):
+            print(posts[i].get('data', {}).get('title'), end="")
+        # print("OK", end=None)
     else:
         # print("OK", end="")
-        sys.stdout.write("OK")
-        sys.stdout.flush()
-        # print(None)
+        print(None, end="")
