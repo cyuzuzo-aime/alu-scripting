@@ -1,11 +1,11 @@
 #!/usr/bin/python3
-"""Queries the Reddit API and prints the titles of the first 10 hot posts listed for a given subreddit."""
+"""Script that fetch 10 hot post for a given subreddit."""
 import requests
 
 
 def top_ten(subreddit):
-    """
-    Prints the titles of the first 10 hot posts for a given subreddit."""
+    """Return number of subscribers if @subreddit is valid subreddit.
+    if not return 0."""
 
     url = f"https://www.reddit.com/r/{subreddit}/hot.json"
 
