@@ -7,11 +7,11 @@ def top_ten(subreddit):
     """Return number of subscribers if @subreddit is valid subreddit.
     if not return 0."""
 
-    headers = {
+    hdr = {
         'User-Agent': 'python:alx_topten:v1.0 (by rwandanuser)'
     }
-    subreddit_url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
-    response = requests.get(subreddit_url, headers=headers, allow_redirects=False)
+    url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
+    response = requests.get(url, headers=hdr, allow_redirects=False)
 
     if response.status_code == 200:
         json_data = response.json()
